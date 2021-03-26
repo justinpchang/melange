@@ -10,6 +10,7 @@ import {
   getRandomHexColor,
 } from '../../utils/colors';
 import SETTINGS from '../../constants/settings';
+import useCanvasStore from '../../stores/canvas';
 
 import {
   PalletteColor,
@@ -25,7 +26,8 @@ const Pallette: FC<Props> = ({
   initialColors = Array(SETTINGS.N_COLORS).fill('white'),
 }): ReactElement => {
   const [colors, setColors] = useState(initialColors);
-  const [currentColorIndex, setCurrentColorIndex] = useState(0);
+  const currentColor = useCanvasStore(state => state.color);
+  const setCurrentColor = useCanvasStore(state => state.setColor);
 
   // Populate array with random colors
   const generateColors = (): void => {
@@ -42,8 +44,8 @@ const Pallette: FC<Props> = ({
       <PalletteColor
         key={i}
         color={color}
-        selected={currentColorIndex === i}
-        onClick={() => setCurrentColorIndex(i)}
+        selected={currentColor === color}
+        onClick={() => setCurrentColor(color)}
       />
     ));
   };
