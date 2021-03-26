@@ -25,6 +25,7 @@ const Pallette: FC<Props> = ({
   initialColors = Array(SETTINGS.N_COLORS).fill('white'),
 }): ReactElement => {
   const [colors, setColors] = useState(initialColors);
+  const [currentColorIndex, setCurrentColorIndex] = useState(0);
 
   // Populate array with random colors
   const generateColors = (): void => {
@@ -41,6 +42,8 @@ const Pallette: FC<Props> = ({
       <PalletteColor
         key={i}
         color={color}
+        selected={currentColorIndex === i}
+        onClick={() => setCurrentColorIndex(i)}
       />
     ));
   };
@@ -52,6 +55,8 @@ const Pallette: FC<Props> = ({
   return (
     <div>
       {renderPallette()}
+      <br />
+      <button onClick={generateColors}>Refresh</button>
     </div>
   );
 };
