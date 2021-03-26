@@ -13,8 +13,8 @@ import SETTINGS from '../../constants/settings';
 import useCanvasStore from '../../stores/canvas';
 
 import {
-  PalletteColor,
-} from './Pallette.styles';
+  PaletteColor,
+} from './Palette.styles';
 
 const propTypes = {
   initialColors: PropTypes.arrayOf(PropTypes.string),
@@ -22,7 +22,7 @@ const propTypes = {
 
 type Props = PropTypes.InferProps<typeof propTypes>;
 
-const Pallette: FC<Props> = ({
+const Palette: FC<Props> = ({
   initialColors = Array(SETTINGS.N_COLORS).fill('white'),
 }): ReactElement => {
   const [colors, setColors] = useState(initialColors);
@@ -39,9 +39,9 @@ const Pallette: FC<Props> = ({
   };
 
   // Display colors as circles
-  const renderPallette = () => {
+  const renderPalette = () => {
     return colors?.map((color, i) => color && (
-      <PalletteColor
+      <PaletteColor
         key={i}
         color={color}
         selected={currentColor === color}
@@ -56,13 +56,13 @@ const Pallette: FC<Props> = ({
 
   return (
     <div>
-      {renderPallette()}
+      {renderPalette()}
       <br />
       <button onClick={generateColors}>Refresh</button>
     </div>
   );
 };
 
-Pallette.propTypes = propTypes;
+Palette.propTypes = propTypes;
 
-export default Pallette;
+export default Palette;

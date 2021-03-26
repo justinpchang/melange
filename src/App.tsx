@@ -3,13 +3,13 @@ import React, {
   ReactElement,
 } from 'react';
 
-import Pallette from './components/Pallette';
+import Palette from './components/Palette';
 import Canvas from './components/Canvas';
 
 const App: FC = (): ReactElement => {
   return (
     <div className="App">
-      <Pallette />
+      <Palette />
       <Canvas />
     </div>
   );

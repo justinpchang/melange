@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const PalletteColor = styled.div<{
+export const PaletteColor = styled.div<{
   color?: string,
   selected?: boolean,
 }>`
