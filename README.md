@@ -1,4 +1,4 @@
-# MÉLANGE
+# MÉLANGE 🎨
 
 A game where players pitted against each other with a randomized pallette and a canvas to create a color that is the closest match to a randomized goal color.
 
