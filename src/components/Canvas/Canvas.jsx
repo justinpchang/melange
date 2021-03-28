@@ -10,8 +10,6 @@ import { Catenary } from 'catenary-curve';
 
 import ResizeObserver from 'resize-observer-polyfill';
 
-import drawImage from './drawImage';
-
 function midPointBtw(p1, p2) {
   return {
     x: p1.x + (p2.x - p1.x) / 2,
@@ -22,6 +20,7 @@ function midPointBtw(p1, p2) {
 const canvasStyle = {
   display: 'block',
   position: 'absolute',
+  border: '1px solid black',
 };
 
 const canvasTypes = [
@@ -36,10 +35,6 @@ const canvasTypes = [
   {
     name: 'temp',
     zIndex: 12,
-  },
-  {
-    name: 'grid',
-    zIndex: 10,
   },
 ];
 
@@ -58,9 +53,7 @@ export default class extends PureComponent {
     brushRadius: PropTypes.number,
     brushColor: PropTypes.string,
     catenaryColor: PropTypes.string,
-    gridColor: PropTypes.string,
     backgroundColor: PropTypes.string,
-    hideGrid: PropTypes.bool,
     canvasWidth: dimensionsPropTypes,
     canvasHeight: dimensionsPropTypes,
     disabled: PropTypes.bool,
@@ -79,9 +72,7 @@ export default class extends PureComponent {
     brushRadius: 10,
     brushColor: '#444',
     catenaryColor: '#0a0302',
-    gridColor: 'rgba(150,150,150,0.17)',
     backgroundColor: '#FFF',
-    hideGrid: false,
     canvasWidth: 400,
     canvasHeight: 400,
     disabled: false,
@@ -124,7 +115,6 @@ export default class extends PureComponent {
     );
     this.canvasObserver.observe(this.canvasContainer);
 
-    this.drawImage();
     this.loop();
 
     window.setTimeout(() => {
@@ -168,21 +158,6 @@ export default class extends PureComponent {
 
   componentWillUnmount = () => {
     this.canvasObserver.unobserve(this.canvasContainer);
-  };
-
-  drawImage = () => {
-    if (!this.props.imgSrc) return;
-
-    // Load the image
-    this.image = new Image();
-
-    // Prevent SecurityError 'Tainted canvases may not be exported.' #70
-    this.image.crossOrigin = 'anonymous';
-
-    // Draw the image once loaded
-    this.image.onload = () =>
-      drawImage({ ctx: this.ctx.grid, img: this.image });
-    this.image.src = this.props.imgSrc;
   };
 
   undo = () => {
@@ -330,10 +305,7 @@ export default class extends PureComponent {
       this.setCanvasSize(this.canvas.interface, width, height);
       this.setCanvasSize(this.canvas.drawing, width, height);
       this.setCanvasSize(this.canvas.temp, width, height);
-      this.setCanvasSize(this.canvas.grid, width, height);
 
-      this.drawGrid(this.ctx.grid);
-      this.drawImage();
       this.loop({ once: true });
     }
     this.loadSaveData(saveData, true);
@@ -369,21 +341,15 @@ export default class extends PureComponent {
   handlePointerMove = (x, y) => {
     if (this.props.disabled) return;
 
-    this.lazy.update({ x, y });
-    const isDisabled = !this.lazy.isEnabled();
-
-    if (
-      (this.isPressing && !this.isDrawing) ||
-      (isDisabled && this.isPressing)
-    ) {
+    if (this.isPressing && !this.isDrawing) {
       // Start drawing and add point
       this.isDrawing = true;
-      this.points.push(this.lazy.brush.toObject());
+      this.points.push({ x, y });
     }
 
     if (this.isDrawing) {
       // Add new point
-      this.points.push(this.lazy.brush.toObject());
+      this.points.push({ x, y });
 
       // Draw current points
       this.drawPoints({
@@ -491,36 +457,6 @@ export default class extends PureComponent {
         this.loop();
       });
     }
-  };
-
-  drawGrid = ctx => {
-    if (this.props.hideGrid) return;
-
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-
-    ctx.beginPath();
-    ctx.setLineDash([5, 1]);
-    ctx.setLineDash([]);
-    ctx.strokeStyle = this.props.gridColor;
-    ctx.lineWidth = 0.5;
-
-    const gridSize = 25;
-
-    let countX = 0;
-    while (countX < ctx.canvas.width) {
-      countX += gridSize;
-      ctx.moveTo(countX, 0);
-      ctx.lineTo(countX, ctx.canvas.height);
-    }
-    ctx.stroke();
-
-    let countY = 0;
-    while (countY < ctx.canvas.height) {
-      countY += gridSize;
-      ctx.moveTo(0, countY);
-      ctx.lineTo(ctx.canvas.width, countY);
-    }
-    ctx.stroke();
   };
 
   drawInterface = (ctx, pointer, brush) => {
