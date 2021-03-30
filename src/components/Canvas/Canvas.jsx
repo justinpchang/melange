@@ -58,7 +58,6 @@ export default class extends PureComponent {
     canvasHeight: dimensionsPropTypes,
     disabled: PropTypes.bool,
     imgSrc: PropTypes.string,
-    saveData: PropTypes.string,
     immediateLoading: PropTypes.bool,
     hideInterface: PropTypes.bool,
   };
@@ -77,7 +76,6 @@ export default class extends PureComponent {
     canvasHeight: 400,
     disabled: false,
     imgSrc: '',
-    saveData: '',
     immediateLoading: false,
     hideInterface: false,
   };
@@ -131,11 +129,6 @@ export default class extends PureComponent {
       this.mouseHasMoved = true;
       this.valuesChanged = true;
       this.clear();
-
-      // Load saveData from prop if it exists
-      if (this.props.saveData) {
-        this.loadSaveData(this.props.saveData);
-      }
     }, 100);
   }
 
@@ -144,10 +137,6 @@ export default class extends PureComponent {
       // Set new lazyRadius values
       this.chainLength = this.props.lazyRadius * window.devicePixelRatio;
       this.lazy.setRadius(this.props.lazyRadius * window.devicePixelRatio);
-    }
-
-    if (prevProps.saveData !== this.props.saveData) {
-      this.loadSaveData(this.props.saveData);
     }
 
     if (JSON.stringify(prevProps) !== JSON.stringify(this.props)) {
@@ -165,101 +154,6 @@ export default class extends PureComponent {
     this.clear();
     this.simulateDrawingLines({ lines, immediate: true });
     this.triggerOnChange();
-  };
-
-  getSaveData = () => {
-    // Construct and return the stringified saveData object
-    return JSON.stringify({
-      lines: this.lines,
-      width: this.props.canvasWidth,
-      height: this.props.canvasHeight,
-    });
-  };
-
-  loadSaveData = (saveData, immediate = this.props.immediateLoading) => {
-    if (typeof saveData !== 'string') {
-      throw new Error('saveData needs to be of type string!');
-    }
-
-    const { lines, width, height } = JSON.parse(saveData);
-
-    if (!lines || typeof lines.push !== 'function') {
-      throw new Error('saveData.lines needs to be an array!');
-    }
-
-    this.clear();
-
-    if (
-      width === this.props.canvasWidth &&
-      height === this.props.canvasHeight
-    ) {
-      this.simulateDrawingLines({
-        lines,
-        immediate,
-      });
-    } else {
-      // we need to rescale the lines based on saved & current dimensions
-      const scaleX = this.props.canvasWidth / width;
-      const scaleY = this.props.canvasHeight / height;
-      const scaleAvg = (scaleX + scaleY) / 2;
-
-      this.simulateDrawingLines({
-        lines: lines.map(line => ({
-          ...line,
-          points: line.points.map(p => ({
-            x: p.x * scaleX,
-            y: p.y * scaleY,
-          })),
-          brushRadius: line.brushRadius * scaleAvg,
-        })),
-        immediate,
-      });
-    }
-  };
-
-  simulateDrawingLines = ({ lines, immediate }) => {
-    // Simulate live-drawing of the loaded lines
-    // TODO use a generator
-    let curTime = 0;
-    let timeoutGap = immediate ? 0 : this.props.loadTimeOffset;
-
-    lines.forEach(line => {
-      const { points, brushColor, brushRadius } = line;
-
-      // Draw all at once if immediate flag is set, instead of using setTimeout
-      if (immediate) {
-        // Draw the points
-        this.drawPoints({
-          points,
-          brushColor,
-          brushRadius,
-        });
-
-        // Save line with the drawn points
-        this.points = points;
-        this.saveLine({ brushColor, brushRadius });
-        return;
-      }
-
-      // Use timeout to draw
-      for (let i = 1; i < points.length; i++) {
-        curTime += timeoutGap;
-        window.setTimeout(() => {
-          this.drawPoints({
-            points: points.slice(0, i + 1),
-            brushColor,
-            brushRadius,
-          });
-        }, curTime);
-      }
-
-      curTime += timeoutGap;
-      window.setTimeout(() => {
-        // Save this line with its props instead of this.props
-        this.points = points;
-        this.saveLine({ brushColor, brushRadius });
-      }, curTime);
-    });
   };
 
   handleDrawStart = e => {
@@ -299,7 +193,6 @@ export default class extends PureComponent {
   };
 
   handleCanvasResize = (entries, observer) => {
-    const saveData = this.getSaveData();
     for (const entry of entries) {
       const { width, height } = entry.contentRect;
       this.setCanvasSize(this.canvas.interface, width, height);
@@ -308,7 +201,6 @@ export default class extends PureComponent {
 
       this.loop({ once: true });
     }
-    this.loadSaveData(saveData, true);
   };
 
   setCanvasSize = (canvas, width, height) => {
