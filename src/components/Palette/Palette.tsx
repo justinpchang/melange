@@ -36,6 +36,7 @@ const Palette: FC<Props> = ({
       newColors.push(getRandomHexColor());
     }
     setColors(newColors);
+    setCurrentColor(newColors[0]);
   };
 
   // Display colors as circles

@@ -1,14 +1,15 @@
 /**
- * Forked from react-canvas-draw
- * https://github.com/embiem/react-canvas-draw
+ * Modified from react-canvas-draw
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import stylePropType from 'react-style-proptype';
 import { LazyBrush } from 'lazy-brush';
 import { Catenary } from 'catenary-curve';
-
 import ResizeObserver from 'resize-observer-polyfill';
+
+import SETTINGS from '../../constants/settings';
+import useCanvasStore from '../../stores/canvas';
 
 function midPointBtw(p1, p2) {
   return {
@@ -43,41 +44,29 @@ const dimensionsPropTypes = PropTypes.oneOfType([
   PropTypes.string,
 ]);
 
-export default class extends PureComponent {
+class Canvas extends PureComponent {
   static propTypes = {
     className: PropTypes.string,
     style: stylePropType,
     onChange: PropTypes.func,
-    loadTimeOffset: PropTypes.number,
-    lazyRadius: PropTypes.number,
     brushRadius: PropTypes.number,
     brushColor: PropTypes.string,
-    catenaryColor: PropTypes.string,
     backgroundColor: PropTypes.string,
     canvasWidth: dimensionsPropTypes,
     canvasHeight: dimensionsPropTypes,
     disabled: PropTypes.bool,
-    imgSrc: PropTypes.string,
-    immediateLoading: PropTypes.bool,
-    hideInterface: PropTypes.bool,
   };
 
   static defaultProps = {
     className: null,
     style: null,
     onChange: null,
-    loadTimeOffset: 5,
-    lazyRadius: 12,
     brushRadius: 10,
     brushColor: '#444',
-    catenaryColor: '#0a0302',
     backgroundColor: '#FFF',
     canvasWidth: 400,
     canvasHeight: 400,
     disabled: false,
-    imgSrc: '',
-    immediateLoading: false,
-    hideInterface: false,
   };
 
   constructor(props) {
@@ -192,7 +181,7 @@ export default class extends PureComponent {
     this.saveLine();
   };
 
-  handleCanvasResize = (entries, observer) => {
+  handleCanvasResize = (entries) => {
     for (const entry of entries) {
       const { width, height } = entry.contentRect;
       this.setCanvasSize(this.canvas.interface, width, height);
@@ -336,10 +325,6 @@ export default class extends PureComponent {
 
   loop = ({ once = false } = {}) => {
     if (this.mouseHasMoved || this.valuesChanged) {
-      const pointer = this.lazy.getPointerCoordinates();
-      const brush = this.lazy.getBrushCoordinates();
-
-      this.drawInterface(this.ctx.interface, pointer, brush);
       this.mouseHasMoved = false;
       this.valuesChanged = false;
     }
@@ -349,46 +334,6 @@ export default class extends PureComponent {
         this.loop();
       });
     }
-  };
-
-  drawInterface = (ctx, pointer, brush) => {
-    if (this.props.hideInterface) return;
-
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-
-    // Draw brush preview
-    ctx.beginPath();
-    ctx.fillStyle = this.props.brushColor;
-    ctx.arc(brush.x, brush.y, this.props.brushRadius, 0, Math.PI * 2, true);
-    ctx.fill();
-
-    // Draw mouse point (the one directly at the cursor)
-    ctx.beginPath();
-    ctx.fillStyle = this.props.catenaryColor;
-    ctx.arc(pointer.x, pointer.y, 4, 0, Math.PI * 2, true);
-    ctx.fill();
-
-    // Draw catenary
-    if (this.lazy.isEnabled()) {
-      ctx.beginPath();
-      ctx.lineWidth = 2;
-      ctx.lineCap = 'round';
-      ctx.setLineDash([2, 4]);
-      ctx.strokeStyle = this.props.catenaryColor;
-      this.catenary.drawToCanvas(
-        this.ctx.interface,
-        brush,
-        pointer,
-        this.chainLength,
-      );
-      ctx.stroke();
-    }
-
-    // Draw brush point (the one in the middle of the brush preview)
-    ctx.beginPath();
-    ctx.fillStyle = this.props.catenaryColor;
-    ctx.arc(brush.x, brush.y, 2, 0, Math.PI * 2, true);
-    ctx.fill();
   };
 
   render() {
@@ -436,3 +381,15 @@ export default class extends PureComponent {
     );
   }
 }
+
+const withStore = (props) => {
+  const color = useCanvasStore(state => state.color);
+  return <Canvas
+    {...props}
+    brushColor={color}
+    brushRadius={SETTINGS.BRUSH_RADIUS}
+    backgroundColor={SETTINGS.BACKGROUND_COLOR}
+  />
+};
+
+export default withStore;
