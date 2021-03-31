@@ -1,6 +1,3 @@
-/**
- * Modified from react-canvas-draw
- */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import stylePropType from 'react-style-proptype';
@@ -10,13 +7,6 @@ import ResizeObserver from 'resize-observer-polyfill';
 
 import SETTINGS from '../../constants/settings';
 import useCanvasStore from '../../stores/canvas';
-
-function midPointBtw(p1, p2) {
-  return {
-    x: p1.x + (p2.x - p1.x) / 2,
-    y: p1.y + (p2.y - p1.y) / 2,
-  };
-}
 
 const canvasStyle = {
   display: 'block',
@@ -244,9 +234,9 @@ class Canvas extends PureComponent {
   };
 
   drawPoints = ({ points, brushColor, brushRadius }) => {
-    this.ctx.temp.lineJoin = 'round';
-    this.ctx.temp.lineCap = 'round';
-    this.ctx.temp.strokeStyle = brushColor;
+    this.ctx.temp.fillStyle = brushColor;
+    this.ctx.temp.globalAlpha = SETTINGS.OPACITY;
+    this.ctx.temp.globalCompositeOperation = SETTINGS.BLEND_MODE;
 
     this.ctx.temp.clearRect(
       0,
@@ -259,22 +249,13 @@ class Canvas extends PureComponent {
     let p1 = points[0];
     let p2 = points[1];
 
-    this.ctx.temp.moveTo(p2.x, p2.y);
-    this.ctx.temp.beginPath();
-
     for (var i = 1, len = points.length; i < len; i++) {
-      // we pick the point between pi+1 & pi+2 as the
-      // end point and p1 as our control point
-      var midPoint = midPointBtw(p1, p2);
-      this.ctx.temp.quadraticCurveTo(p1.x, p1.y, midPoint.x, midPoint.y);
+      this.ctx.temp.beginPath();
+      this.ctx.temp.fillRect(p1.x - brushRadius, p1.y - brushRadius, brushRadius * 2, brushRadius * 2);
+      this.ctx.temp.fill();
       p1 = points[i];
       p2 = points[i + 1];
     }
-    // Draw last line as a straight line while
-    // we wait for the next point to be able to calculate
-    // the bezier control point
-    this.ctx.temp.lineTo(p1.x, p1.y);
-    this.ctx.temp.stroke();
   };
 
   saveLine = ({ brushColor, brushRadius } = {}) => {
