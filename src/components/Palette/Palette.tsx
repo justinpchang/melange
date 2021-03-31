@@ -59,7 +59,7 @@ const Palette: FC<Props> = ({
     <div>
       {renderPalette()}
       <br />
-      <button onClick={generateColors}>Refresh</button>
+      <button onClick={generateColors}>Refresh palette</button>
     </div>
   );
 };
