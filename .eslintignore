@@ -1,2 +1,3 @@
 **/*.js
 **/*.jsx
+src/components/Picker/EyeDropper/*

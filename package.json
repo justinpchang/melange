@@ -12,6 +12,7 @@
     "@types/react-canvas-draw": "^1.1.0",
     "@types/react-dom": "^17.0.0",
     "@types/styled-components": "^5.1.9",
+    "get-canvas-pixel-color": "^2.0.1",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
     "react-canvas-draw": "^1.1.1",

@@ -1,3 +1,18 @@
+const numberToHex = (rgb: number): string => {
+  let hex = rgb.toString(16);
+  if (hex.length < 2) {
+    hex = `0${hex}`;
+  }
+  return hex;
+};
+
+export const rgbToHex = (r: number, g: number, b: number): string => {
+  const red = numberToHex(r);
+  const green = numberToHex(g);
+  const blue = numberToHex(b);
+  return `#${red}${green}${blue}`;
+};
+
 export const getRandomHexColor = (): string => {
   const LETTERS = '0123456789ABCDEF';
   let color = '#';

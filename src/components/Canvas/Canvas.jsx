@@ -337,6 +337,7 @@ class Canvas extends PureComponent {
       >
         {canvasTypes.map(({ name, zIndex }) => {
           const isInterface = name === 'interface';
+          const isDrawing = name === 'drawing';
           return (
             <canvas
               key={name}
@@ -344,6 +345,7 @@ class Canvas extends PureComponent {
                 if (canvas) {
                   this.canvas[name] = canvas;
                   this.ctx[name] = canvas.getContext('2d');
+                  if (isDrawing) this.props.setCanvas(canvas);
                 }
               }}
               style={{ ...canvasStyle, zIndex }}
@@ -365,11 +367,15 @@ class Canvas extends PureComponent {
 
 const withStore = (props) => {
   const color = useCanvasStore(state => state.color);
+  const setCanvas = useCanvasStore(state => state.setCanvas);
+  const disabled = useCanvasStore(state => state.disabled);
   return <Canvas
     {...props}
     brushColor={color}
     brushRadius={SETTINGS.BRUSH_RADIUS}
     backgroundColor={SETTINGS.BACKGROUND_COLOR}
+    setCanvas={setCanvas}
+    disabled={disabled}
   />
 };
 
