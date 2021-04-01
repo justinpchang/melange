@@ -11,6 +11,7 @@ import Controls from './components/Controls';
 
 import {
   MainContainer,
+  Top,
   Middle,
   Bottom,
 } from './App.styles';
@@ -18,6 +19,10 @@ import {
 const App: FC = (): ReactElement => {
   return (
     <MainContainer>
+      <Top>
+        <Target />
+        <Picker />
+      </Top>
       <Middle>
         <Canvas />
       </Middle>

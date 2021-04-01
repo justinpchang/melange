@@ -19,7 +19,10 @@ import {
 } from '../../utils/events';
 
 import {
+  PickedColorContainer,
+  PickedColorBackground,
   PickedColor,
+  Icon,
 } from './Picker.styles';
 
 const Picker: FC = (): ReactElement => {
@@ -97,18 +100,21 @@ const Picker: FC = (): ReactElement => {
   }, [pickingColor, pickedColor, targetColor]);
 
   return (
-    <div>
-      <div style={{display: 'inline-block'}}>
-        <h3>Picked:</h3>
-        <PickedColor color={displayColor} />
-        <br />
-        <button onClick={startPickingColor} disabled={buttonDisabled}>Pick color</button>
-      </div>
-      <div style={{display: 'inline-block', border: '2px solid black', padding: '10px'}}>
-        <h3>Result:</h3>
-        <h1>{accuracy}%</h1>
-      </div>
-    </div>
+    <PickedColorContainer>
+      <PickedColorBackground />
+      <PickedColor
+        color={displayColor}
+        onClick={startPickingColor}
+      >
+        <Icon
+          fitted
+          name='eyedropper'
+          size='big'
+          color={pickingColor ? 'yellow' : 'black'}
+        />
+        &nbsp;
+      </PickedColor>
+    </PickedColorContainer>
   );
 };
 

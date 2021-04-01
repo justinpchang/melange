@@ -12,6 +12,7 @@ import useCanvasStore from '../../stores/canvas';
 
 import {
   TargetColor,
+  TargetText,
 } from './Target.styles';
 
 const Target: FC = (): ReactElement => {
@@ -26,15 +27,12 @@ const Target: FC = (): ReactElement => {
 
   useEffect(() => {
     generateColor();
-  }, []);
+  }, [palette]);
 
   return (
-    <div>
-      <h3>Target:</h3>
-      <TargetColor color={targetColor} />
-      <br />
-      <button onClick={generateColor}>Refresh target</button>
-    </div>
+    <TargetColor color={targetColor}>
+      <TargetText>&nbsp;TARGET</TargetText>
+    </TargetColor>
   );
 };
 
