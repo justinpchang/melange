@@ -2,9 +2,9 @@ const SETTINGS = {
   CANVAS: {
     N_COLORS: 6, // Number of colors in palette
     BRUSH_RADIUS: 30, // Base size of rectangle drawn
-    BRUSH_RADIUS_DEVIATION: 10, // Shimmer effect of brush
+    BRUSH_RADIUS_DEVIATION: 0, // Shimmer effect of brush
     BACKGROUND_COLOR: 'white', // Background of drawing canvas
-    OPACITY: 0.2, // Opacity of brush
+    OPACITY: 0.1, // Opacity of brush
     BLEND_MODE: 'hard-light', // Blend mode for color mixing
   },
   GENERATION: {
