@@ -13,6 +13,8 @@ import SETTINGS from '../../constants/settings';
 import useCanvasStore from '../../stores/canvas';
 
 import {
+  PaletteContainer,
+  PaletteColorContainer,
   PaletteColor,
 } from './Palette.styles';
 
@@ -41,12 +43,14 @@ const Palette: FC<Props> = ({
   // Display colors as circles
   const renderPalette = () => {
     return colors?.map((color, i) => color && (
-      <PaletteColor
-        key={i}
-        color={color}
-        selected={currentColor === color}
-        onClick={() => setCurrentColor(color)}
-      />
+      <PaletteColorContainer>
+        <PaletteColor
+          key={i}
+          color={color}
+          selected={currentColor === color}
+          onClick={() => setCurrentColor(color)}
+        />
+      </PaletteColorContainer>
     ));
   };
 
@@ -55,11 +59,9 @@ const Palette: FC<Props> = ({
   }, [])
 
   return (
-    <div>
+    <PaletteContainer>
       {renderPalette()}
-      <br />
-      <button onClick={generateColors}>Refresh palette</button>
-    </div>
+    </PaletteContainer>
   );
 };
 
