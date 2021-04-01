@@ -22,7 +22,7 @@ const App: FC = (): ReactElement => {
   return (
     <div>
       <Header>
-        mélange mélange mélange mélange mélange mélange mélange mélange mélange mélange mélange mélange mélange mélange mélange mélange mélange mélange mélange mélange mélange mélange mélange mélange mélange mélange mélange 
+        mélange mix mélange mix mélange mix mélange mix mélange mix mélange mix mélange mix mélange mix mélange mix mélange mix mélange mix mélange mix mélange mix mélange mix mélange mix mélange mix mélange mix mélange mix 
       </Header>
       <MainContainer>
         <Top>
