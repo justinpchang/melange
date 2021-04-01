@@ -132,7 +132,7 @@ export const rgbToHex = (r: number, g: number, b: number): Hex => {
 };
 
 export const deriveTargetColor = (colors: Array<Hex>): Hex => {
-  const shufflePalette = (array: Array<string>) => {
+  const shufflePalette = (array: Array<string>): void => {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [array[i], array[j]] = [array[j], array[i]];
