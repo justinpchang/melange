@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import stylePropType from 'react-style-proptype';
+import { LazyBrush } from 'lazy-brush';
 import { Catenary } from 'catenary-curve';
 import ResizeObserver from 'resize-observer-polyfill';
 
@@ -75,6 +76,16 @@ class Canvas extends PureComponent {
   }
 
   componentDidMount() {
+    this.lazy = new LazyBrush({
+      radius: this.props.lazyRadius * window.devicePixelRatio,
+      enabled: true,
+      initialPoint: {
+        x: window.innerWidth / 2,
+        y: window.innerHeight / 2,
+      },
+    });
+    this.chainLength = this.props.lazyRadius * window.devicePixelRatio;
+
     this.canvasObserver = new ResizeObserver((entries, observer) =>
       this.handleCanvasResize(entries, observer),
     );
