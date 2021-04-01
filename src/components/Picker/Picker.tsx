@@ -88,7 +88,7 @@ const Picker: FC = (): ReactElement => {
   }, [pickingColor]);
 
   useEffect(() => {
-    setDisplayColor(pickedColor);
+    if (pickedColor == '') setDisplayColor(pickedColor);
   }, [pickedColor]);
 
   return (

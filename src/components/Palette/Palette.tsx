@@ -3,7 +3,6 @@ import React, {
   ReactElement,
   useEffect,
   useState,
-  useReducer,
 } from 'react';
 import PropTypes from 'prop-types';
 
@@ -28,7 +27,6 @@ type Props = PropTypes.InferProps<typeof propTypes>;
 const Palette: FC<Props> = ({
   initialColors = Array(SETTINGS.CANVAS.N_COLORS).fill('white'),
 }): ReactElement => {
-  const [, forceRender] = useReducer(x => x + 1, 0);
   const [colors, setColors] = useState(initialColors);
   const currentColor = useCanvasStore(state => state.color);
   const setCurrentColor = useCanvasStore(state => state.setColor);
