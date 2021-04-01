@@ -23,7 +23,7 @@ const propTypes = {
 type Props = PropTypes.InferProps<typeof propTypes>;
 
 const Palette: FC<Props> = ({
-  initialColors = Array(SETTINGS.N_COLORS).fill('white'),
+  initialColors = Array(SETTINGS.CANVAS.N_COLORS).fill('white'),
 }): ReactElement => {
   const [colors, setColors] = useState(initialColors);
   const currentColor = useCanvasStore(state => state.color);

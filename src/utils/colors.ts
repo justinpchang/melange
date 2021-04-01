@@ -9,6 +9,9 @@ type Hex = string;
 
 const LETTERS = '0123456789ABCDEF';
 const {
+  N_COLORS,
+} = SETTINGS.CANVAS;
+const {
   DEVIATION,
   P_ADD_COLOR,
   MIX_SCALAR,
@@ -180,7 +183,7 @@ export const calcColorDifference = (color0: string, color1: string): number => {
 
 export const generatePalette = (): Array<Hex> => {
   const palette: Array<Hex> = [];
-  for (let i = 0; i < SETTINGS.N_COLORS; i += 1) {
+  for (let i = 0; i < N_COLORS; i += 1) {
     palette.push(getDifferentColor(palette));
   }
   return palette;

@@ -235,8 +235,8 @@ class Canvas extends PureComponent {
 
   drawPoints = ({ points, brushColor, brushRadius }) => {
     this.ctx.temp.fillStyle = brushColor;
-    this.ctx.temp.globalAlpha = SETTINGS.OPACITY;
-    this.ctx.temp.globalCompositeOperation = SETTINGS.BLEND_MODE;
+    this.ctx.temp.globalAlpha = SETTINGS.CANVAS.OPACITY;
+    this.ctx.temp.globalCompositeOperation = SETTINGS.CANVAS.BLEND_MODE;
 
     this.ctx.temp.clearRect(
       0,
@@ -250,8 +250,10 @@ class Canvas extends PureComponent {
     let p2 = points[1];
 
     for (var i = 1, len = points.length; i < len; i++) {
+      const dev = Math.random() * SETTINGS.CANVAS.BRUSH_RADIUS_DEVIATION;
+      const r = brushRadius + (dev * 2 - dev);
       this.ctx.temp.beginPath();
-      this.ctx.temp.fillRect(p1.x - brushRadius, p1.y - brushRadius, brushRadius * 2, brushRadius * 2);
+      this.ctx.temp.fillRect(p1.x - r, p1.y - r, r * 2, r * 2);
       this.ctx.temp.fill();
       p1 = points[i];
       p2 = points[i + 1];
@@ -372,8 +374,8 @@ const withStore = (props) => {
   return <Canvas
     {...props}
     brushColor={color}
-    brushRadius={SETTINGS.BRUSH_RADIUS}
-    backgroundColor={SETTINGS.BACKGROUND_COLOR}
+    brushRadius={SETTINGS.CANVAS.BRUSH_RADIUS}
+    backgroundColor={SETTINGS.CANVAS.BACKGROUND_COLOR}
     setCanvas={setCanvas}
     disabled={disabled}
   />
