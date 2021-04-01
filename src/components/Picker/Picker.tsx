@@ -27,6 +27,7 @@ import {
 const Picker: FC = (): ReactElement => {
   const canvas = useCanvasStore(state => state.canvas);
   const setCanvasDisabled = useCanvasStore(state => state.setDisabled);
+  const pickedColor = useGameStore(state => state.pickedColor);
   const setPickedColor = useGameStore(state => state.setPickedColor);
   const [displayColor, setDisplayColor] = useState('');
   const [pickingColor, setPickingColor] = useState(false);
@@ -85,6 +86,10 @@ const Picker: FC = (): ReactElement => {
       document.removeEventListener('touchend', stopPickingColor);
     }
   }, [pickingColor]);
+
+  useEffect(() => {
+    setDisplayColor(pickedColor);
+  }, [pickedColor]);
 
   return (
     <PickedColorContainer>

@@ -3,6 +3,7 @@ import React, {
   ReactElement,
   useEffect,
   useState,
+  useReducer,
 } from 'react';
 import PropTypes from 'prop-types';
 
@@ -27,9 +28,11 @@ type Props = PropTypes.InferProps<typeof propTypes>;
 const Palette: FC<Props> = ({
   initialColors = Array(SETTINGS.CANVAS.N_COLORS).fill('white'),
 }): ReactElement => {
+  const [, forceRender] = useReducer(x => x + 1, 0);
   const [colors, setColors] = useState(initialColors);
   const currentColor = useCanvasStore(state => state.color);
   const setCurrentColor = useCanvasStore(state => state.setColor);
+  const palette = useCanvasStore(state => state.palette);
   const setPalette = useCanvasStore(state => state.setPalette);
 
   // Populate array with random colors
@@ -43,9 +46,8 @@ const Palette: FC<Props> = ({
   // Display colors as circles
   const renderPalette = () => {
     return colors?.map((color, i) => color && (
-      <PaletteColorContainer>
+      <PaletteColorContainer key={i}>
         <PaletteColor
-          key={i}
           color={color}
           selected={currentColor === color}
           onClick={() => setCurrentColor(color)}
@@ -57,6 +59,10 @@ const Palette: FC<Props> = ({
   useEffect(() => {
     generateColors();
   }, [])
+
+  useEffect(() => {
+    setColors(palette);
+  }, [palette]);
 
   return (
     <PaletteContainer>
