@@ -7,11 +7,15 @@ import Palette from './components/Palette';
 import Canvas from './components/Canvas';
 import Target from './components/Target';
 import Picker from './components/Picker';
+import Controls from './components/Controls';
+
+import {
+  MainContainer,
+} from './App.styles';
 
 const App: FC = (): ReactElement => {
   return (
-    <div className="App">
-      <Palette />
+    <MainContainer>
       <div style={{display: 'inline-block'}}>
         <Target />
       </div>
@@ -19,7 +23,9 @@ const App: FC = (): ReactElement => {
         <Picker />
       </div>
       <Canvas />
-    </div>
+      <Controls />
+      <Palette />
+    </MainContainer>
   );
 }
 

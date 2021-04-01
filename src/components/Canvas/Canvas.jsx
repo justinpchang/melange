@@ -11,7 +11,7 @@ import useCanvasStore from '../../stores/canvas';
 const canvasStyle = {
   display: 'block',
   position: 'absolute',
-  border: '1px solid black',
+  border: '1px solid lightgrey',
 };
 
 const canvasTypes = [
@@ -378,6 +378,8 @@ const withStore = (props) => {
     backgroundColor={SETTINGS.CANVAS.BACKGROUND_COLOR}
     setCanvas={setCanvas}
     disabled={disabled}
+    canvasWidth="300px"
+    canvasHeight="300px"
   />
 };
 
