@@ -11,20 +11,20 @@ import Controls from './components/Controls';
 
 import {
   MainContainer,
+  Middle,
+  Bottom,
 } from './App.styles';
 
 const App: FC = (): ReactElement => {
   return (
     <MainContainer>
-      <div style={{display: 'inline-block'}}>
-        <Target />
-      </div>
-      <div style={{display: 'inline-block', marginLeft: '30px'}}>
-        <Picker />
-      </div>
-      <Canvas />
-      <Controls />
-      <Palette />
+      <Middle>
+        <Canvas />
+      </Middle>
+      <Bottom>
+        <Palette />
+        <Controls />
+      </Bottom>
     </MainContainer>
   );
 }

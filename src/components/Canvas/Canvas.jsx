@@ -11,7 +11,6 @@ import useCanvasStore from '../../stores/canvas';
 const canvasStyle = {
   display: 'block',
   position: 'absolute',
-  border: '1px solid lightgrey',
 };
 
 const canvasTypes = [

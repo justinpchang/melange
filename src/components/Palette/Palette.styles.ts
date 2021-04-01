@@ -23,12 +23,14 @@ export const PaletteColor = styled.div<{
   color?: string,
   selected?: boolean,
 }>`
-  width: 55px;
-  height: 55px;
-  border: ${props => props.selected
-    ? '5px solid #540B0E'
-    : '2px solid #540B0E'
-  };
+  ${props => props.selected ? `
+    height: 60px;
+    width: 60px;
+  ` : `
+    height: 50px;
+    width: 50px;
+  `}
+  border: 3px solid black;
   border-radius: 50%;
   background: ${props => props.color};
 `;
