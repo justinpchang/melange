@@ -10,7 +10,6 @@ import useCanvasStore from '../../stores/canvas';
 import useGameStore from '../../stores/game';
 import {
   rgbToHex,
-  calcColorDifference,
 } from '../../utils/colors';
 import {
   Event,
@@ -28,20 +27,15 @@ import {
 const Picker: FC = (): ReactElement => {
   const canvas = useCanvasStore(state => state.canvas);
   const setCanvasDisabled = useCanvasStore(state => state.setDisabled);
-  const targetColor = useGameStore(state => state.targetColor);
-  const pickedColor = useGameStore(state => state.pickedColor);
   const setPickedColor = useGameStore(state => state.setPickedColor);
   const [displayColor, setDisplayColor] = useState('');
   const [pickingColor, setPickingColor] = useState(false);
-  const [buttonDisabled, setButtonDisabled] = useState(false);
-  const [accuracy, setAccuracy] = useState('--');
 
   const setPickingMode = (isPicking: boolean) => {
     if (document.body) {
       document.body.style.cursor = isPicking ? 'copy' : 'auto';
     }
     setPickingColor(isPicking);
-    setButtonDisabled(isPicking);
     setCanvasDisabled(isPicking);
   };
 
@@ -74,7 +68,6 @@ const Picker: FC = (): ReactElement => {
 
   useEffect(() => {
     if (pickingColor) {
-      setAccuracy('--');
       document.addEventListener('mousemove', pickColor);
       document.addEventListener('click', stopPickingColor);
       document.addEventListener('touchmove', pickColor);
@@ -92,12 +85,6 @@ const Picker: FC = (): ReactElement => {
       document.removeEventListener('touchend', stopPickingColor);
     }
   }, [pickingColor]);
-
-  useEffect(() => {
-    if (!pickingColor && pickedColor && targetColor) {
-      setAccuracy((100 - calcColorDifference(pickedColor.substring(1), targetColor.substring(1))).toString());
-    }
-  }, [pickingColor, pickedColor, targetColor]);
 
   return (
     <PickedColorContainer>
