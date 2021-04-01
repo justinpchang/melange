@@ -26,6 +26,7 @@ const Controls: FC = (): ReactElement => {
           fitted
           name='check'
           size='big'
+          color='green'
         />
       </TopControl>
       <BottomControl onClick={handleReload}>
@@ -33,6 +34,7 @@ const Controls: FC = (): ReactElement => {
           fitted
           name='redo'
           size='big'
+          color='red'
         />
       </BottomControl>
     </ControlsContainer>
