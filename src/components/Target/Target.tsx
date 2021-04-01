@@ -5,7 +5,7 @@ import React, {
 } from 'react';
 
 import {
-  deriveTargetColor,
+  deriveTargetColorWithDifference,
 } from '../../utils/colors';
 import useGameStore from '../../stores/game';
 import useCanvasStore from '../../stores/canvas';
@@ -20,7 +20,7 @@ const Target: FC = (): ReactElement => {
   const palette = useCanvasStore(state => state.palette);
 
   const generateColor = (): void => {
-    const newColor = deriveTargetColor(palette);
+    const newColor = deriveTargetColorWithDifference(palette);
     setTargetColor(newColor);
   };
 

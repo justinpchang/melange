@@ -7,7 +7,7 @@ import React, {
 import PropTypes from 'prop-types';
 
 import {
-  getRandomHexColor,
+  generatePalette,
 } from '../../utils/colors';
 import SETTINGS from '../../constants/settings';
 import useCanvasStore from '../../stores/canvas';
@@ -32,10 +32,7 @@ const Palette: FC<Props> = ({
 
   // Populate array with random colors
   const generateColors = (): void => {
-    const newColors = [];
-    for (let i = 0; i < SETTINGS.N_COLORS; i += 1) {
-      newColors.push(getRandomHexColor());
-    }
+    const newColors = generatePalette();
     setColors(newColors);
     setPalette(newColors);
     setCurrentColor(newColors[0]);

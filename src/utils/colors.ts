@@ -1,15 +1,18 @@
+import SETTINGS from "../constants/settings";
+
 type RGB = {
   r: number,
   g: number,
   b: number,
 };
-
 type Hex = string;
 
 const LETTERS = '0123456789ABCDEF';
-const DEVIATION = 30;
-const P_ADD_COLOR = 0.7;
-const MIX_SCALAR = 0.8;
+const DEVIATION = 30; // Randomness to add to palette to derive target
+const P_ADD_COLOR = 0.7; // Probability of using each color to derive target
+const MIX_SCALAR = 0.2; // Amount of palette influence to derive target
+const DIFFERENCE_THRESHOLD = .2; // Minimum difference of every color
+const MAX_ITER = 20; // Iterations before giving up generating different color
 
 const numberToHex = (rgb: number): Hex => {
   let hex = rgb.toString(16);
@@ -86,19 +89,41 @@ const deviateRgb = (rgb: RGB): RGB => {
   };
 };
 
-export const rgbToHex = (r: number, g: number, b: number): Hex => {
-  const red = numberToHex(r);
-  const green = numberToHex(g);
-  const blue = numberToHex(b);
-  return `#${red}${green}${blue}`;
+const isDifferentColor = (color: Hex, palette: Array<Hex>): boolean => {
+  for (const color_ of palette) {
+    if (calcColorDifference(color.substring(1), color_.substring(1))/100 < DIFFERENCE_THRESHOLD) {
+      return false;
+    }
+  }
+  return true;
 };
 
-export const getRandomHexColor = (): Hex => {
+const getRandomHexColor = (): Hex => {
   let color = '#';
   for (let i = 0; i < 6; i += 1) {
     color += LETTERS[Math.floor(Math.random() * 16)];
   }
   return color;
+};
+
+const getDifferentColor = (
+  palette: Array<Hex>,
+  newColor: (palette: Array<Hex>) => Hex = getRandomHexColor,
+): Hex => {
+  let i = 0;
+  let color = newColor(palette);
+  while (!isDifferentColor(color, palette) && i < MAX_ITER) {
+    color = newColor(palette);
+    i += 1;
+  }
+  return color;
+};
+
+export const rgbToHex = (r: number, g: number, b: number): Hex => {
+  const red = numberToHex(r);
+  const green = numberToHex(g);
+  const blue = numberToHex(b);
+  return `#${red}${green}${blue}`;
 };
 
 export const deriveTargetColor = (colors: Array<Hex>): Hex => {
@@ -130,6 +155,10 @@ export const deriveTargetColor = (colors: Array<Hex>): Hex => {
   return rgbToHex(rgb.r, rgb.g, rgb.b);
 };
 
+export const deriveTargetColorWithDifference = (palette: Array<Hex>): Hex => {
+  return getDifferentColor(palette, deriveTargetColor);
+};
+
 export const calcColorDifference = (color0: string, color1: string): number => {
   if (!color0 || !color1) {
     throw 'No colors provided';
@@ -145,9 +174,12 @@ export const calcColorDifference = (color0: string, color1: string): number => {
     b: parseInt(color1.substring(4, 6), 16) / 255 * 100,
   };
   return Math.round(rgbDeltaE(Object.values(rgb0), Object.values(rgb1)));
-  /*
-  const val0 = Math.round((rgb0.r + rgb0.g + rgb0.b) / 3);
-  const val1 = Math.round((rgb1.r + rgb1.g + rgb1.b) / 3);
-  return Math.abs(val0 - val1);   
-  */
-}
+};
+
+export const generatePalette = (): Array<Hex> => {
+  const palette: Array<Hex> = [];
+  for (let i = 0; i < SETTINGS.N_COLORS; i += 1) {
+    palette.push(getDifferentColor(palette));
+  }
+  return palette;
+};
