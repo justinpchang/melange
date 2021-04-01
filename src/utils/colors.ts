@@ -1,10 +1,28 @@
-const numberToHex = (rgb: number): string => {
+type RGB = {
+  r: number,
+  g: number,
+  b: number,
+};
+
+type Hex = string;
+
+const LETTERS = '0123456789ABCDEF';
+const DEVIATION = 30;
+const P_ADD_COLOR = 0.7;
+
+const numberToHex = (rgb: number): Hex => {
   let hex = rgb.toString(16);
   if (hex.length < 2) {
     hex = `0${hex}`;
   }
   return hex;
 };
+
+const hexToRgb = (hex: Hex): RGB => ({
+  r: parseInt(hex.substring(1, 3), 16),
+  g: parseInt(hex.substring(3, 5), 16),
+  b: parseInt(hex.substring(5, 7), 16),
+});
 
 const rgbToLab = (rgb: Array<number>) => {
   let r = rgb[0] / 255, g = rgb[1] / 255, b = rgb[2] / 255, x, y, z;
@@ -38,22 +56,65 @@ const rgbDeltaE = (rgbA: Array<number>, rgbB: Array<number>) => {
   const deltaHkhsh = deltaH / (sh);
   const i = deltaLKlsl * deltaLKlsl + deltaCkcsc * deltaCkcsc + deltaHkhsh * deltaHkhsh;
   return i < 0 ? 0 : Math.sqrt(i);
-}
+};
 
-export const rgbToHex = (r: number, g: number, b: number): string => {
+const colorChannelMixer = (channelA: number, channelB: number, mixAmount: number) => {
+  return Math.round(channelA * mixAmount + channelB * (1 - mixAmount));
+};
+
+const mixColors = (rgbA: Array<number>, rgbB: Array<number>, mixAmount: number): RGB => ({
+  r: colorChannelMixer(rgbA[0], rgbB[0], mixAmount),
+  g: colorChannelMixer(rgbA[1], rgbB[1], mixAmount),
+  b: colorChannelMixer(rgbA[2], rgbB[2], mixAmount),
+});
+
+const deviateRgb = (rgb: RGB): RGB => {
+  const clamp = (num: number, min: number, max: number): number => {
+    return num <= min ? min : num >= max ? max : num;
+  };
+
+  const deviateChannel = (value: number): number => {
+    const plusOrMinus = (Math.random() < 0.5) ? -1 : 1;
+    return clamp(value + plusOrMinus * Math.round(Math.random() * DEVIATION), 0, 255);
+  };
+
+  return {
+    r: deviateChannel(rgb.r),
+    g: deviateChannel(rgb.g),
+    b: deviateChannel(rgb.b),
+  };
+};
+
+export const rgbToHex = (r: number, g: number, b: number): Hex => {
   const red = numberToHex(r);
   const green = numberToHex(g);
   const blue = numberToHex(b);
   return `#${red}${green}${blue}`;
 };
 
-export const getRandomHexColor = (): string => {
-  const LETTERS = '0123456789ABCDEF';
+export const getRandomHexColor = (): Hex => {
   let color = '#';
-  for (let i = 0; i < 6; i++) {
+  for (let i = 0; i < 6; i += 1) {
     color += LETTERS[Math.floor(Math.random() * 16)];
   }
   return color;
+};
+
+export const deriveTargetColor = (colors: Array<Hex>): Hex => {
+  // Start with random base color (on the lighter side for better mixing)
+  let rgb: RGB = {
+    r: Math.random() * 128 + 128,
+    g: Math.random() * 128 + 128,
+    b: Math.random() * 128 + 128,
+  };
+  for (const color of colors) {
+    // Decide if color will be added to the mix
+    if (Math.random() < P_ADD_COLOR) {
+      // Mix deviated color
+      rgb = mixColors(Object.values(rgb), Object.values(deviateRgb(hexToRgb(color))), 0.5);
+    }
+  }
+  return rgbToHex(rgb.r, rgb.g, rgb.b);
 };
 
 export const calcColorDifference = (color0: string, color1: string): number => {

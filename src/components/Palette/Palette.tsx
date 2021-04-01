@@ -28,6 +28,7 @@ const Palette: FC<Props> = ({
   const [colors, setColors] = useState(initialColors);
   const currentColor = useCanvasStore(state => state.color);
   const setCurrentColor = useCanvasStore(state => state.setColor);
+  const setPalette = useCanvasStore(state => state.setPalette);
 
   // Populate array with random colors
   const generateColors = (): void => {
@@ -36,6 +37,7 @@ const Palette: FC<Props> = ({
       newColors.push(getRandomHexColor());
     }
     setColors(newColors);
+    setPalette(newColors);
     setCurrentColor(newColors[0]);
   };
 

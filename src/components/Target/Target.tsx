@@ -5,9 +5,10 @@ import React, {
 } from 'react';
 
 import {
-  getRandomHexColor,
+  deriveTargetColor,
 } from '../../utils/colors';
 import useGameStore from '../../stores/game';
+import useCanvasStore from '../../stores/canvas';
 
 import {
   TargetColor,
@@ -16,9 +17,10 @@ import {
 const Target: FC = (): ReactElement => {
   const targetColor = useGameStore(state => state.targetColor);
   const setTargetColor = useGameStore(state => state.setTargetColor);
+  const palette = useCanvasStore(state => state.palette);
 
   const generateColor = (): void => {
-    const newColor = getRandomHexColor();
+    const newColor = deriveTargetColor(palette);
     setTargetColor(newColor);
   };
 
