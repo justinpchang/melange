@@ -12,6 +12,11 @@ import {
   rgbToHex,
   calcColorDifference,
 } from '../../utils/colors';
+import {
+  Event,
+  isMouseEvent,
+  isTouchEvent,
+} from '../../utils/events';
 
 import {
   PickedColor,
@@ -26,7 +31,7 @@ const Picker: FC = (): ReactElement => {
   const [displayColor, setDisplayColor] = useState('');
   const [pickingColor, setPickingColor] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(false);
-  const [accuracy, setAccuracy] = useState(0);
+  const [accuracy, setAccuracy] = useState('--');
 
   const setPickingMode = (isPicking: boolean) => {
     if (document.body) {
@@ -39,34 +44,57 @@ const Picker: FC = (): ReactElement => {
 
   const startPickingColor = () => setPickingMode(true);
 
-  const stopPickingColor = () => setPickingMode(false);
+  const stopPickingColor = (e: Event) => {
+    setPickingMode(false);
+    e.preventDefault();
+  };
 
-  const pickColor = (e: MouseEvent) => {
+  const pickColor = (e: Event) => {
     const rect = canvas?.getBoundingClientRect();
-    const x = e.x - (rect?.x || 0);
-    const y = e.y - (rect?.y || 0);
+    let x, y;
+    if (isMouseEvent(e)) {
+      x = e.clientX;
+      y = e.clientY;
+    }
+    if (isTouchEvent(e)) {
+      const touch = e.touches[0];
+      x = touch.clientX;
+      y = touch.clientY;
+    }
+    if (x) x -= rect?.x || 0;
+    if (y) y -= rect?.y || 0;
     const { r, g, b, a } = getCanvasPixelColor(canvas, x, y);
     setDisplayColor(`rgba(${r}, ${g}, ${b}, ${a / 255})`);
     setPickedColor(rgbToHex(r, g, b));
-    stopPickingColor();
+    e.preventDefault();
   };
 
-  // Setup listener for click
   useEffect(() => {
     if (pickingColor) {
-      document.addEventListener('click', pickColor);
+      setAccuracy('--');
+      document.addEventListener('mousemove', pickColor);
+      document.addEventListener('click', stopPickingColor);
+      document.addEventListener('touchmove', pickColor);
+      document.addEventListener('touchend', stopPickingColor);
+    } else {
+      document.removeEventListener('mousemove', pickColor);
+      document.removeEventListener('click', stopPickingColor);
+      document.removeEventListener('touchmove', pickColor);
+      document.removeEventListener('touchend', stopPickingColor);
     }
     return () => {
-      document.removeEventListener('click', pickColor);
+      document.removeEventListener('mousemove', pickColor);
+      document.removeEventListener('click', stopPickingColor);
+      document.removeEventListener('touchmove', pickColor);
+      document.removeEventListener('touchend', stopPickingColor);
     }
   }, [pickingColor]);
 
-  // Calculate accuracy
   useEffect(() => {
-    if (pickedColor && targetColor) {
-      setAccuracy(100 - calcColorDifference(pickedColor.substring(1), targetColor.substring(1)));
+    if (!pickingColor && pickedColor && targetColor) {
+      setAccuracy((100 - calcColorDifference(pickedColor.substring(1), targetColor.substring(1))).toString());
     }
-  }, [pickedColor, targetColor]);
+  }, [pickingColor, pickedColor, targetColor]);
 
   return (
     <div>
