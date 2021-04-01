@@ -71,17 +71,20 @@ const Picker: FC = (): ReactElement => {
     if (pickingColor) {
       document.addEventListener('mousemove', pickColor);
       document.addEventListener('click', stopPickingColor);
+      document.addEventListener('touchstart', pickColor);
       document.addEventListener('touchmove', pickColor);
       document.addEventListener('touchend', stopPickingColor);
     } else {
       document.removeEventListener('mousemove', pickColor);
       document.removeEventListener('click', stopPickingColor);
+      document.removeEventListener('touchstart', pickColor);
       document.removeEventListener('touchmove', pickColor);
       document.removeEventListener('touchend', stopPickingColor);
     }
     return () => {
       document.removeEventListener('mousemove', pickColor);
       document.removeEventListener('click', stopPickingColor);
+      document.removeEventListener('touchstart', pickColor);
       document.removeEventListener('touchmove', pickColor);
       document.removeEventListener('touchend', stopPickingColor);
     }
