@@ -9,6 +9,7 @@ type Hex = string;
 const LETTERS = '0123456789ABCDEF';
 const DEVIATION = 30;
 const P_ADD_COLOR = 0.7;
+const MIX_SCALAR = 0.8;
 
 const numberToHex = (rgb: number): Hex => {
   let hex = rgb.toString(16);
@@ -101,17 +102,29 @@ export const getRandomHexColor = (): Hex => {
 };
 
 export const deriveTargetColor = (colors: Array<Hex>): Hex => {
+  const shufflePalette = (array: Array<string>) => {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+  }
   // Start with random base color (on the lighter side for better mixing)
   let rgb: RGB = {
     r: Math.random() * 128 + 128,
     g: Math.random() * 128 + 128,
     b: Math.random() * 128 + 128,
   };
-  for (const color of colors) {
+  const palette = [...colors];
+  shufflePalette(palette);
+  for (const color of palette) {
     // Decide if color will be added to the mix
     if (Math.random() < P_ADD_COLOR) {
       // Mix deviated color
-      rgb = mixColors(Object.values(rgb), Object.values(deviateRgb(hexToRgb(color))), 0.5);
+      rgb = mixColors(
+        Object.values(rgb),
+        Object.values(deviateRgb(hexToRgb(color))),
+        1 - Math.random() * MIX_SCALAR,
+      );
     }
   }
   return rgbToHex(rgb.r, rgb.g, rgb.b);
