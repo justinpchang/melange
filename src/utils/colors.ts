@@ -8,11 +8,13 @@ type RGB = {
 type Hex = string;
 
 const LETTERS = '0123456789ABCDEF';
-const DEVIATION = 30; // Randomness to add to palette to derive target
-const P_ADD_COLOR = 0.7; // Probability of using each color to derive target
-const MIX_SCALAR = 0.2; // Amount of palette influence to derive target
-const DIFFERENCE_THRESHOLD = .2; // Minimum difference of every color
-const MAX_ITER = 20; // Iterations before giving up generating different color
+const {
+  DEVIATION,
+  P_ADD_COLOR,
+  MIX_SCALAR,
+  DIFFERENCE_THRESHOLD,
+  MAX_ITER,
+} = SETTINGS.GENERATION;
 
 const numberToHex = (rgb: number): Hex => {
   let hex = rgb.toString(16);
