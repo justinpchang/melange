@@ -8,6 +8,8 @@ import ResizeObserver from 'resize-observer-polyfill';
 import SETTINGS from '../../constants/settings';
 import useCanvasStore from '../../stores/canvas';
 
+import './canvasBorder.css';
+
 const canvasStyle = {
   display: 'block',
   position: 'absolute',
@@ -377,8 +379,9 @@ const withStore = (props) => {
     backgroundColor={SETTINGS.CANVAS.BACKGROUND_COLOR}
     setCanvas={setCanvas}
     disabled={disabled}
-    canvasWidth="300px"
-    canvasHeight="300px"
+    canvasWidth='300px'
+    canvasHeight='300px'
+    className='canvas'
   />
 };
 
