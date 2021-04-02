@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { WINDOW_DIMENSIONS } from './constants/window';
 
 export const Header = styled.div`
   margin-top: 20px;
@@ -24,13 +25,19 @@ export const Container = styled.div`
 
 
 export const Content = styled.div`
-  max-width: 350px;
   width: 100%;
   height: 100%;
   margin: auto;
   display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
+
+  max-width: 90%;
+  flex-direction: row;
+  justify-content: center;
+  ${WINDOW_DIMENSIONS.TABLET} {
+    max-width: 350px;
+    flex-direction: column;
+    justify-content: space-evenly;
+  }
 `;
 
 export const Footer = styled.div`
@@ -43,21 +50,33 @@ export const Footer = styled.div`
 
 export const Top = styled.div`
   display: flex;
-  flex-direction: row;
-  width: 100%;
   justify-content: center;
+  width: 100%;
+
+  flex-direction: column;
+  ${WINDOW_DIMENSIONS.TABLET} {
+    flex-direction: row;
+  }
 `;
 
 export const Middle = styled.div`
   display: flex;
-  flex-direction: row;
   width: 100%;
   justify-content: space-around;
+
+  flex-direction: column;
+  ${WINDOW_DIMENSIONS.TABLET} {
+    flex-direction: row;
+  }
 `;
 
 export const Bottom = styled.div`
   display: flex;
-  flex-direction: row;
+  justify-content: center;
   width: 100%;
-  justify-content: space-evenly;
+
+  flex-direction: column;
+  ${WINDOW_DIMENSIONS.TABLET} {
+    flex-direction: row;
+  }
 `;

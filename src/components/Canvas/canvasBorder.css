@@ -1,6 +1,18 @@
 .canvas {
 	position: relative;
 	box-shadow: 10px 10px 42px 0 rgba(0,0,0,0.75);
+  width: 60vw;
+  height: 60vw;
+  max-width: 400px;
+  max-height: 400px;
+  margin: 0 auto;
+}
+
+@media only screen and (orientation: landscape) {
+  .canvas {
+    width: 40vw;
+    height: 40vw;
+  }
 }
 
 .canvas:after, .canvas:before{

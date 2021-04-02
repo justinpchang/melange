@@ -43,8 +43,6 @@ class Canvas extends PureComponent {
     brushRadius: PropTypes.number,
     brushColor: PropTypes.string,
     backgroundColor: PropTypes.string,
-    canvasWidth: dimensionsPropTypes,
-    canvasHeight: dimensionsPropTypes,
     disabled: PropTypes.bool,
   };
 
@@ -55,8 +53,6 @@ class Canvas extends PureComponent {
     brushRadius: 10,
     brushColor: '#444',
     backgroundColor: '#FFF',
-    canvasWidth: 400,
-    canvasHeight: 400,
     disabled: false,
   };
 
@@ -328,8 +324,6 @@ class Canvas extends PureComponent {
           display: 'block',
           background: this.props.backgroundColor,
           touchAction: 'none',
-          width: this.props.canvasWidth,
-          height: this.props.canvasHeight,
           ...this.props.style,
         }}
         ref={container => {
@@ -379,8 +373,6 @@ const withStore = (props) => {
     backgroundColor={SETTINGS.CANVAS.BACKGROUND_COLOR}
     setCanvas={setCanvas}
     disabled={disabled}
-    canvasWidth='300px'
-    canvasHeight='300px'
     className='canvas'
   />
 };

@@ -31,7 +31,7 @@ const Target: FC = (): ReactElement => {
 
   return (
     <TargetColor color={targetColor}>
-      <TargetText>&nbsp;TARGET</TargetText>
+      <TargetText>TARGET</TargetText>
     </TargetColor>
   );
 };

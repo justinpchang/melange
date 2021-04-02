@@ -1,15 +1,25 @@
 import styled from 'styled-components';
+import { WINDOW_DIMENSIONS } from '../../constants/window';
 
 export const ControlsContainer = styled.div`
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
   background: #9E2A2B;
   box-shadow: 0px 4px 10px 4px rgba(0, 0, 0, 0.25);
   border-radius: 40px;
-  height: 160px;
-  width: 80px;
+  margin: 0 auto;
+
+  height: 80px;
+  width: 160px;
+  flex-direction: row;
+  margin-top: 30px;
+  ${WINDOW_DIMENSIONS.TABLET} {
+    height: 160px;
+    width: 80px;
+    flex-direction: column;
+    margin-top: 0px;
+  }
 `;
 
 export const TopControl = styled.div`
@@ -28,5 +38,7 @@ export const TopControl = styled.div`
 `;
 
 export const BottomControl = styled(TopControl)`
-  margin-top: 10px;
+  ${WINDOW_DIMENSIONS.TABLET} {
+    margin-top: 10px;
+  }
 `;
