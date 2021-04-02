@@ -10,12 +10,13 @@ import Picker from './components/Picker';
 import Controls from './components/Controls';
 
 import {
-  MainContainer,
+  Container,
   Header,
+  Content,
+  Footer,
   Top,
   Middle,
   Bottom,
-  Footer,
 } from './App.styles';
 
 const App: FC = (): ReactElement => {
@@ -26,11 +27,11 @@ const App: FC = (): ReactElement => {
   };
 
   return (
-    <div>
+    <Container>
       <Header>
         mélange mix mélange mix mélange mix mélange mix mélange mix mélange mix mélange mix mélange mix mélange mix mélange mix mélange mix mélange mix mélange mix mélange mix mélange mix mélange mix mélange mix mélange mix 
       </Header>
-      <MainContainer>
+      <Content>
         <Top>
           <Target />
           <Picker />
@@ -42,15 +43,15 @@ const App: FC = (): ReactElement => {
           <Palette />
           <Controls />
         </Bottom>
-        <Footer>
-          made by justin chang
-          <br />
-          <a onClick={showInstructions}>instructions</a>
-          &nbsp;|&nbsp;
-          <a href="https://github.com/justinpchang/melange">view source</a>
-        </Footer>
-      </MainContainer>
-    </div>
+      </Content>
+      <Footer>
+        made by justin chang
+        <br />
+        <a onClick={showInstructions}>instructions</a>
+        &nbsp;|&nbsp;
+        <a href="https://github.com/justinpchang/melange">view source</a>
+      </Footer>
+    </Container>
   );
 }
 

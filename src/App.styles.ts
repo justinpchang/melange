@@ -11,17 +11,35 @@ export const Header = styled.div`
   flex-direction: row;
   width: 100%;
   margin-left: -30px;
+  position: relative;
 `;
 
-export const MainContainer = styled.div`
-  background: #2F4F57;
-  width: 90%;
-  max-width: 350px;
+export const Container = styled.div`
+  width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+`;
+
+
+export const Content = styled.div`
+  background: #2F4F57;
+  max-width: 350px;
   width: 100%;
-  margin: 0 auto;
+  height: 100%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+`;
+
+export const Footer = styled.div`
+  width: 100%;
+  color: white;
+  font-family: monospace;
+  text-align: center;
+  margin-bottom: 20px;
 `;
 
 export const Top = styled.div`
@@ -29,7 +47,6 @@ export const Top = styled.div`
   flex-direction: row;
   width: 100%;
   justify-content: center;
-  margin-top: 20px;
 `;
 
 export const Middle = styled.div`
@@ -37,7 +54,6 @@ export const Middle = styled.div`
   flex-direction: row;
   width: 100%;
   justify-content: space-around;
-  margin-top: 20px;
 `;
 
 export const Bottom = styled.div`
@@ -45,13 +61,4 @@ export const Bottom = styled.div`
   flex-direction: row;
   width: 100%;
   justify-content: space-evenly;
-  margin-top: 20px;
-`;
-
-export const Footer = styled.div`
-  width: 100%;
-  margin-top: 30px;
-  color: white;
-  font-family: monospace;
-  text-align: center;
 `;
