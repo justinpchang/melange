@@ -24,7 +24,6 @@ export const Container = styled.div`
 
 
 export const Content = styled.div`
-  background: #2F4F57;
   max-width: 350px;
   width: 100%;
   height: 100%;
