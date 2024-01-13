@@ -1,6 +1,7 @@
 import React, {
   FC,
   ReactElement,
+  useEffect,
 } from 'react';
 
 import Palette from './components/Palette';
@@ -25,6 +26,14 @@ const App: FC = (): ReactElement => {
     alert('Page 2 out of 3\n\nWhen you are finished, click the eyedropper to select the color that you think is the best match.');
     alert('Page 3 out of 3\n\nMultiplayer coming soon. Thanks for playing!');
   };
+
+  useEffect(() => {
+    // Only show instructions once using local storage
+    if (!localStorage.getItem('instructionsShown')) {
+      localStorage.setItem('instructionsShown', 'true');
+      showInstructions();
+    }
+  }, []);
 
   return (
     <Container>
